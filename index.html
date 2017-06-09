@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Consumo API</title>
+	<link rel="stylesheet" type="text/css" href="./bootstrap/bootstrap.min.css">
+</head>
+<body>
+	<div class="container js-form-wrapper">
+		<h3>Formulario</h3>
+		<form action="" class="js-form">
+			<input type="text" name="location">
+			<button type="submit" class="btn btn-default btn-primary">ir</button>
+			<br/>
+		</form>
+	</div>
+
+<script src="./jquery.min.js"></script>
+<script src="./bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.js-form-wrapper').on('submit', '.js-form', function(e){
+			e.preventDefault();
+			console.log('boton presionado... :)');
+
+			$.ajax({
+				//Llamada para google.maps
+			});
+
+			$.ajax({
+				//Llamada para instagram
+			});
+		});
+	});
+</script>
+</body>
+</html>
