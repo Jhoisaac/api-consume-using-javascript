@@ -19,6 +19,7 @@ if (!empty($_GET['location'])) {
         '&access_token=40396424.a81193e.dae9df6a96854d318919d784c2c499f1'; //replace "CLIENT-ID"
     $json = file_get_contents($url);
     $array = json_decode($json, true);
+    'https://api.instagram.com/v1/locations/search?lat=36.204824&lng=138.252924&access_token=5547651505.49fe65f.750a0636ba4f4d83a36a1d9660c165d2';
 }
 ?>
 <!DOCTYPE html>

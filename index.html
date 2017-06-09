@@ -3,31 +3,117 @@
 <head>
 	<title>Consumo API</title>
 	<link rel="stylesheet" type="text/css" href="./bootstrap/bootstrap.min.css">
+	<style type="text/css">
+		.form-group.has-error.has-feedback.btn-ir, .form-inline.form-group{
+			vertical-align: top;
+		}
+	</style>
 </head>
 <body>
 	<div class="container js-form-wrapper">
-		<h3>Formulario</h3>
-		<form action="" class="js-form">
-			<input type="text" name="location">
-			<button type="submit" class="btn btn-default btn-primary">ir</button>
-			<br/>
-		</form>
+		<div class="row">
+			<h3>Formulario</h3>
+			<form action="" class="form-inline js-form">
+				<div class="form-group js-msg-error">
+					<input type="text" id="location" name="location" class="form-control" placeholder="Ingrese una ciudad" aria-describedby="helpBlock">
+				</div>
+				<div class="form-group btn-ir">
+					<button type="submit" class="btn btn-default btn-primary">ir</button>
+				</div>
+			</form>
+		</div>
+		<br><br>
+		<div class="row">
+			<div id="url-googleapis"></div>
+			<br>
+			<div id="url-instagramapis"></div>
+		</div>
 	</div>
 
 <script src="./jquery.min.js"></script>
 <script src="./bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		//Variables Globales
+		let maps_array = {};
+		let url = '';
+		let array = {};
+
 		$('.js-form-wrapper').on('submit', '.js-form', function(e){
 			e.preventDefault();
 			console.log('boton presionado... :)');
+			let ciudad = $('#location').val();
+			if (ciudad.length < 1) {
+				$(this).find('.form-group').addClass('has-error has-feedback');
+				$(this).find('.js-msg-error').append('<span id="helpBlock" class="help-block">Por favor ingresa algun valor</span>');
+				/*alert('esta vacio');*/
+				return;
+			}
+
+			let maps_url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + ciudad;
 
 			$.ajax({
-				//Llamada para google.maps
-			});
+				//Llamada a la api de google.maps
+				url: maps_url,
+				type: 'GET',                
+                data: {},
+                /*contentType: 'application/json; charset=utf-8',*/
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Retorno exitoso de la api de google :)');
+                    maps_array = data;
+                    console.dir(maps_array);
+                    $('#url-googleapis').html('<a href="'+maps_url+'" target=_blank>'+maps_url+'</a>');
 
-			$.ajax({
-				//Llamada para instagram
+                    $('.js-form').find('#helpBlock').remove();
+                    $('.js-form').find('.js-field-error').remove();
+            		$('.js-form').find('.form-group').removeClass('has-error has-feedback');
+                    $('#location').val('');
+                    
+                    let ciudad = data['results']['0']['formatted_address'];
+                    let lat = data['results']['0']['geometry']['location']['lat'];
+                    let lng = data['results']['0']['geometry']['location']['lng'];
+                    console.log('Ciudad es: ' + ciudad);
+                    console.log('Latitud es: ' + lat);
+                    console.log('Longitud es: ' + lng);
+
+                    url = 'https://api.instagram.com/v1/locations/search?lat='+lat+'&lng='+lng+'&access_token=5547651505.49fe65f.750a0636ba4f4d83a36a1d9660c165d2';
+			
+					$.ajax({
+						//Llamada a la api de instagram
+						url: url,
+						type: 'GET',
+						data: {},
+						/*contentType: 'application/json; charset=utf-8',*/
+						dataType: 'jsonp',
+						success: function (data) {
+							console.log('Retorno exitoso de la api de instagram');
+							array = data;
+							console.dir(array);
+							$('#url-instagramapis').html('<a href="'+url+'" target=_blank>'+url+'</a>');
+							console.log(array['data'].length);
+							console.log(array['data'].length > 0);
+							if (array['data'].length > 0) {
+								$.each(array['data'], function(index, element){
+									console.log('Nro ' + index + ' Nombre: ' + element['name']);
+									console.log('Nro ' + index + ' Latitud: ' + element['latitude']);
+									console.log('Nro ' + index + ' Longitud: ' + element['longitude']);
+
+									element['latitude'] > 0 ? console.log('polo norte') : console.log('polo norte');	
+									console.log('--------------');
+								});
+							}
+
+						},
+						error: function (jqXHR) {
+							console.log('error en el llamado :(');
+						}
+
+					});
+                },
+                error: function (msg, url, line) {
+                    console.log('error en la llamada :(');
+                }
 			});
 		});
 	});
