@@ -1,0 +1,8 @@
+https://www.instagram.com/oauth/authorize/?client_id=xxxx&redirect_uri=http://localhost&response_type=token&scope=public_content
+https://www.instagram.com/oauth/authorize/?client_id=xxxx&redirect_uri=http://127.0.0.1:1337&response_type=token&scope=public_content
+
+http://127.0.0.1:1337/#access_token=xxxx
+http://localhost/#access_token=xxxx
+http://instagram.pixelunion.net/
+https://stackoverflow.com/questions/41486160/access-control-allow-origin-with-instagram-api
+https://stackoverflow.com/questions/6737824/how-to-run-a-hello-js-file-in-node-js-on-windows
